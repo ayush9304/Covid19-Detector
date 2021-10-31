@@ -207,9 +207,9 @@ def ios_api_image(request):
                 'method': request.method,
                 'name': "null",
                 'description': "Successfully uploaded",
-                'covid_percentage': data.covid_percentage,
-                'normal_percentage': data.normal_percentage,
-                'pneumonia_percentage': data.pneumonia_percentage,
+                'covid_percentage': data.covid_percentage+1,
+                'normal_percentage': data.normal_percentage+1,
+                'pneumonia_percentage': data.pneumonia_percentage+1,
                 'prediction': data.prediction,
                 'image_url': "https://covid19-detection-api.herokuapp.com/media/" + str(data.xray),
             })
@@ -218,9 +218,9 @@ def ios_api_image(request):
             return JsonResponse({
                 'success': False,
                 'description': "Not an X-Ray image",
-                'covid_percentage': 0,
-                'normal_percentage': 0,
-                'pneumonia_percentage': 0,
+                'covid_percentage': 1,
+                'normal_percentage': 1,
+                'pneumonia_percentage': 1,
                 'prediction': "null",
                 'image_url': "https://covid19-detection-api.herokuapp.com/media/" + str(data.xray)
             })
@@ -228,9 +228,9 @@ def ios_api_image(request):
         return JsonResponse({
             'success': False,
             'description': "No image found",
-            'covid_percentage': 0,
-            'normal_percentage': 0,
-            'pneumonia_percentage': 0,
+            'covid_percentage': 1,
+            'normal_percentage': 1,
+            'pneumonia_percentage': 1,
             'prediction': "null",
             'image_url': "null"
         })
