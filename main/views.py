@@ -76,6 +76,67 @@ def classify(file, isurl=False):
 def index(request):
     return render(request, 'main/index.html')
 
+def index_predict(request):
+    if request.method != "POST":
+        return render(request, 'main/index.html', {
+            'result': [
+                "success: False",
+                "description: Request method must be POST"
+            ]
+        })
+    if request.FILES.get('image'):
+        name = request.POST.get('name')
+        image = request.FILES['image']
+
+        if not validate(image):
+            return render(request, 'main/index.html', {
+                'result': [
+                    "success: False",
+                    "description: Image is not a X-ray"
+                ]
+            })
+
+        data = Patient.objects.create(name=name, xray=image)
+
+        prediction, covid_percentage, normal_percentage, pneumonia_percentage = classify(image)
+        data.prediction = prediction
+        data.covid_percentage = covid_percentage
+        data.normal_percentage = normal_percentage
+        data.pneumonia_percentage = pneumonia_percentage
+        data.save()
+
+        # return JsonResponse({
+        #     'success': True,
+        #     'method': request.method,
+        #     'name': data.name,
+        #     'description': "Successfully uploaded",
+        #     'covid_percentage': float(data.covid_percentage),
+        #     'normal_percentage': float(data.normal_percentage),
+        #     'pneumonia_percentage': float(data.pneumonia_percentage),
+        #     'prediction': data.prediction,
+        #     'image_url': "https://covid19-detection-api.herokuapp.com/media/" + str(data.xray)
+        # })
+        return render(request, 'main/index.html', {
+            "result": [
+                f"success: True",
+                f"method: {request.method}",
+                f"name: {data.name}",
+                f"description: Successfully uploaded",
+                f"covid_percentage: {float(data.covid_percentage)}",
+                f"normal_percentage: {float(data.normal_percentage)}",
+                f"pneumonia_percentage: {float(data.pneumonia_percentage)}",
+                f"prediction: {data.prediction}",
+                f"image_url: https://covid19-detection-api.herokuapp.com/media/{str(data.xray)}"
+            ]
+        })
+    else:
+        return render(request, 'main/index.html', {
+            "result": [
+                "success: False",
+                "description: No image found"
+            ]
+        })
+
 @csrf_exempt
 def api_image(request):
     if request.method != "POST":
@@ -169,3 +230,6 @@ def ios_api_image(request):
             'success': False,
             'description': "No image found"
         })
+
+def api_docs(request):
+    return render(request, 'main/api_docs.html')
