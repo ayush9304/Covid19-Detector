@@ -82,7 +82,7 @@ def api_image(request):
             'success': False,
             'description': "Request method must be POST"
         })
-    if request.FILES['image']:
+    if request.FILES.get('image'):
         name = request.POST.get('name')
         image = request.FILES['image']
 
