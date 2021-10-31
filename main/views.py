@@ -200,7 +200,7 @@ def ios_api_image(request):
             return JsonResponse({
                 'success': True,
                 'method': request.method,
-                'name': data.name,
+                'name': "null",
                 'description': "Successfully uploaded",
                 'covid_percentage': data.covid_percentage,
                 'normal_percentage': data.normal_percentage,
@@ -209,7 +209,7 @@ def ios_api_image(request):
                 'image_url': "https://covid19-detection-api.herokuapp.com/media/" + str(data.xray),
             })
         else:
-            data.delete()
+            #data.delete()
             return JsonResponse({
                 'success': False,
                 'description': "Not an X-Ray image"
