@@ -47,7 +47,7 @@ def validate(file, isurl=False) -> bool:
     if not isurl:
         img = Image.open(file.file)
     else:
-        img = Image.open(file)
+        img = Image.open(os.path.join(settings.BASE_DIR, 'media/'+file))
     img = img.convert('RGB')
     img = img.resize((150, 150), Image.NEAREST)
     img = image.img_to_array(img)
@@ -59,7 +59,7 @@ def classify(file, isurl=False):
     if not isurl:
         img = Image.open(file.file)
     else:
-        img = Image.open(file)
+        img = Image.open(os.path.join(settings.BASE_DIR, 'media/'+file))
     img = img.convert('RGB')
     img = img.resize((180, 180), Image.NEAREST)
     img = image.img_to_array(img)
@@ -174,7 +174,12 @@ def ios_api_image(request):
     if request.method != "POST":
         return JsonResponse({
             'success': False,
-            'description': "Request method must be POST"
+            'description': "Request method must be POST",
+            'covid_percentage': 0,
+            'normal_percentage': 0,
+            'pneumonia_percentage': 0,
+            'prediction': "null",
+            'image_url': "null"
         })
 
     if request.POST.get('image'):
@@ -187,10 +192,10 @@ def ios_api_image(request):
         data = Patient.objects.create()
         data.xray.save(filename, imgdata, save=True)  # xray is Patient model's ImageField
 
-        img_url = data.xray.file
+        img_url = str(data.xray)
         
-        if validate(os.path.join(str(img_url)), isurl=True):
-            prediction, covid_percentage, normal_percentage, pneumonia_percentage = classify(os.path.join(str(img_url)), isurl=True)
+        if validate(img_url, isurl=True):
+            prediction, covid_percentage, normal_percentage, pneumonia_percentage = classify(img_url, isurl=True)
             data.prediction = prediction
             data.covid_percentage = covid_percentage
             data.normal_percentage = normal_percentage
@@ -212,12 +217,22 @@ def ios_api_image(request):
             #data.delete()
             return JsonResponse({
                 'success': False,
-                'description': "Not an X-Ray image"
+                'description': "Not an X-Ray image",
+                'covid_percentage': 0,
+                'normal_percentage': 0,
+                'pneumonia_percentage': 0,
+                'prediction': "null",
+                'image_url': "https://covid19-detection-api.herokuapp.com/media/" + str(data.xray)
             })
     else:
         return JsonResponse({
             'success': False,
-            'description': "No image found"
+            'description': "No image found",
+            'covid_percentage': 0,
+            'normal_percentage': 0,
+            'pneumonia_percentage': 0,
+            'prediction': "null",
+            'image_url': "null"
         })
 
 def api_docs(request):
