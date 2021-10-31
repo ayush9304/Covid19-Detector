@@ -105,17 +105,6 @@ def index_predict(request):
         data.pneumonia_percentage = pneumonia_percentage
         data.save()
 
-        # return JsonResponse({
-        #     'success': True,
-        #     'method': request.method,
-        #     'name': data.name,
-        #     'description': "Successfully uploaded",
-        #     'covid_percentage': float(data.covid_percentage),
-        #     'normal_percentage': float(data.normal_percentage),
-        #     'pneumonia_percentage': float(data.pneumonia_percentage),
-        #     'prediction': data.prediction,
-        #     'image_url': "https://covid19-detection-api.herokuapp.com/media/" + str(data.xray)
-        # })
         return render(request, 'main/index.html', {
             "result": [
                 f"success: True",
