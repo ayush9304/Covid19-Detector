@@ -1,1 +1,1 @@
-web: gunicorn apitest.wsgi
+web: gunicorn covid19detector.wsgi
