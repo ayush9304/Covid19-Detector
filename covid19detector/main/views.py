@@ -110,7 +110,7 @@ def api_image(request):
             'normal_percentage': float(data.normal_percentage),
             'pneumonia_percentage': float(data.pneumonia_percentage),
             'prediction': data.prediction,
-            'image_url': "127.0.0.1:8000/media/" + str(data.xray)
+            'image_url': "https://covid19-detection-api.herokuapp.com/media/" + str(data.xray)
         })
     else:
         return JsonResponse({
@@ -155,8 +155,7 @@ def ios_api_image(request):
                 'normal_percentage': data.normal_percentage,
                 'pneumonia_percentage': data.pneumonia_percentage,
                 'prediction': data.prediction,
-                'image_url': "127.0.0.1:8000/media/" + str(data.xray),
-                # 'image_url': "https://api-ayush.herokuapp.com/media/predictions/" + str(filename)
+                'image_url': "https://covid19-detection-api.herokuapp.com/media/" + str(data.xray),
             })
         else:
             data.delete()
