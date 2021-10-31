@@ -1,1 +1,1 @@
-web: gunicorn covid19detector.wsgi
+web: gunicorn covid19detector.covid19detector.wsgi
