@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'covid19-detection-api.herokuapp.com',
+    '127.0.0.1',
 ]
 
 

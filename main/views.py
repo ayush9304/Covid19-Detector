@@ -18,12 +18,13 @@ import os
 
 
 def get_covid19_classifier():
-	model = load_model('models\\covid19_pneumonia_classifier.h5')
+	# model = load_model('models\\covid19_pneumonia_classifier.h5')
+	model = load_model(os.path.join(settings.BASE_DIR, 'models\covid19_pneumonia_classifier.h5'))
 	# model.summary()
 	return model
 
 def get_xray_validator():
-	model = load_model('models\\xray_validator.h5')
+	model = load_model(os.path.join(settings.BASE_DIR, 'models\_xray_validator.h5'))
 	# model.summary()
 	return model
 
