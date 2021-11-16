@@ -36,7 +36,7 @@
 		<div class="container-fluid">
 			<br> <br>
 			<div class="container box">
-				<div class="card border-light">
+				<div class="card border-light" style="border-color: rgba(217,218,219,.5)!important;">
 					<h5 class="card-header bg-light">COVID-19 Detection Using X-Rays</h5>
 					<div class="card-body ">
 						<form method="POST" class="pl-3 pr-3" action="{% url 'index_predict' %}" enctype="multipart/form-data">
@@ -64,10 +64,6 @@
 					</div>	
 				</div>	
 			</div>
-			
-			<!------------------------------------------
-						START RESULT DISPLAY 
-			------------------------------------------->
 			{% if result %}
 			<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center prediction-box" style="min-height: 200px;">
 				<div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
@@ -85,13 +81,10 @@
 				  </div>
 				</div>
 			</div>	
-			{% endif %}
-			<!------------------------------------------
-						START RESULT DISPLAY 
-			------------------------------------------->				
+			{% endif %}				
 			
 		</div>
-        <div class="footer">
+        <div class="footer" style="position: absolute;">
         <div>Designed by Ayush Kumar</div>
         <div id="links">
             <div>

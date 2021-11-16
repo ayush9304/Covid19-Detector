@@ -88,3 +88,8 @@ body{
 .footer #linkedin{
     color: #0a66c2;
 }
+
+
+.alert{
+    margin-bottom: 0;
+}

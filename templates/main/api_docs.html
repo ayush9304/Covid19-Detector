@@ -39,7 +39,47 @@
 				<div class="card border-light card-box">
 					<h5 class="card-header bg-light">COVID-19 Detection APIs</h5>
 					<div class="card-body ">
-						<div class="card cblock">
+                        <div class="card cblock">
+                            <div class="card-body cb">
+                                <div class="cbi">
+                                    <div class="cb1">
+                                        <span class="card-title h5">Warmup <span class="badge badge-dark">GET | POST</span>&emsp;:&emsp;&emsp;&emsp;</span>
+                                    </div>
+                                    <div class="cb2">
+                                        <span><code>https://covid19-detection-api.herokuapp.com/warmup</code></span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="ex">
+                                        <div class="ex1">
+                                            Input Parameters:
+                                        </div>
+                                        <div class="ex2">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="ex">
+                                        <div class="ex1">
+                                            JSON Response Body:
+                                        </div>
+                                        <div class="ex2">
+                                            <b>{</b><br>
+                                            <b>&emsp;"success"&nbsp;&nbsp;:&emsp;</b> boolean<br>
+                                            <b>&emsp;"description"&nbsp;&nbsp;:&emsp;</b> text<br>
+                                            <b>}</b><br>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-success">
+                                        <span class="alert-link">Description:&nbsp;&nbsp;&nbsp;</span>
+                                        Warmup request is used to check if the server is up and running.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<div class="card cblock2">
                             <div class="card-body cb">
                                 <div class="cbi">
                                     <div class="cb1">
@@ -114,13 +154,19 @@
                                             <b>&emsp;"method"&nbsp;&nbsp;:&emsp;</b> "POST"<br>
                                             <b>&emsp;"name"&nbsp;&nbsp;:&emsp;</b> text<br>
                                             <b>&emsp;"description"&nbsp;&nbsp;:&emsp;</b> text<br>
-                                            <b>&emsp;"covid_percentage"&nbsp;&nbsp;:&emsp;</b> float<br>
-                                            <b>&emsp;"normal_percentage"&nbsp;&nbsp;:&emsp;</b> float<br>
-                                            <b>&emsp;"pneumonia_percentage"&nbsp;&nbsp;:&emsp;</b> float<br>
+                                            <b>&emsp;"covid_percentage"&nbsp;&nbsp;:&emsp;</b> float + 1<br>
+                                            <b>&emsp;"normal_percentage"&nbsp;&nbsp;:&emsp;</b> float + 1<br>
+                                            <b>&emsp;"pneumonia_percentage"&nbsp;&nbsp;:&emsp;</b> float + 1<br>
                                             <b>&emsp;"prediction"&nbsp;&nbsp;:&emsp;</b> text<br>
                                             <b>&emsp;"image_url"&nbsp;&nbsp;:&emsp;</b> URL<br>
                                             <b>}</b><br>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-success">
+                                        <span class="alert-link">NOTE:&nbsp;&nbsp;&nbsp;</span>
+                                        In JSON Response, prediction percentage values are increased by one.
                                     </div>
                                 </div>
                             </div>

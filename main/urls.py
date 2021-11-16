@@ -7,4 +7,5 @@ urlpatterns = [
     path('api/image', views.api_image, name='api_image'),
     path('api/ios/image', views.ios_api_image, name='ios_api_image'),
     path('api/docs', views.api_docs, name='api_docs'),
+    path('warmup', views.warmup, name='warmup'),
 ]

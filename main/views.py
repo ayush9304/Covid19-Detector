@@ -175,9 +175,9 @@ def ios_api_image(request):
         return JsonResponse({
             'success': False,
             'description': "Request method must be POST",
-            'covid_percentage': 0,
-            'normal_percentage': 0,
-            'pneumonia_percentage': 0,
+            'covid_percentage': 1,
+            'normal_percentage': 1,
+            'pneumonia_percentage': 1,
             'prediction': "null",
             'image_url': "null"
         })
@@ -237,3 +237,9 @@ def ios_api_image(request):
 
 def api_docs(request):
     return render(request, 'main/api_docs.html')
+
+def warmup(request):
+    return JsonResponse({
+        'success': True,
+        'description': "Warming up"
+    })
