@@ -4,10 +4,9 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="SERVING TENSORFLOW 2.0 MODELS VIA DJANGO">
-		<meta name="author" content="AIBharata.com">
+		<meta name="description" content="COVID19 Detection using X-Ray Images">
+		<meta name="author" content="Ayush Kumar">
 		<title>COVID-19 Detector | CoviScan</title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="{% static 'styles.css' %}">
@@ -40,49 +39,35 @@
 					<h5 class="card-header bg-light">COVID-19 Detection Using X-Rays</h5>
 					<div class="card-body ">
 						<form method="POST" class="pl-3 pr-3" action="{% url 'index_predict' %}" enctype="multipart/form-data">
-							{% csrf_token %}
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">Patient Name</span>
                                 </div>
-                                <input type="text" name="name" class="form-control" aria-describedby="basic-addon1">
+                                <input type="text" name="name" id="input_name" class="form-control" aria-describedby="basic-addon1">
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroupFileAddon01">X-Ray Image</span>
                                 </div>
                                 <div class="custom-file">
-                                    <input type="file" name="image" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" required>
+                                    <input type="file" name="image" id="input_image" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" required>
                                     <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                                 </div>
                             </div>
 							<div class="form-group text-center">
 								<br>
-								<button class="btn btn-rounded btn-info" type="submit">Upload and Predict</button>
+								<button type="submit" id="orig_submit_btn" style="display: none;" class="btn btn-primary">Predict</button>
+								<button class="btn btn-rounded btn-info" id="form-button">
+									<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="spinr"></span>
+									Upload and Predict
+								</button>
 							</div>
 						</form>
 					</div>	
 				</div>	
 			</div>
-			{% if result %}
-			<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center prediction-box" style="min-height: 200px;">
-				<div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
-				  <div class="toast-header">
-					<strong class="mr-auto">Prediction &emsp; &emsp; &emsp; &emsp; &emsp;</strong>
-					<small><span id="datetime"></span></small>
-					<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-					  <span aria-hidden="true">&times;</span>
-					</button>
-				  </div>
-				  <div class="toast-body">
-					{% for x in result %}
-						<h6>{{ x }}<h6>
-					{% endfor %}
-				  </div>
-				</div>
-			</div>	
-			{% endif %}				
-			
+			<div id="result-div">
+			</div>
 		</div>
         <div class="footer">
         <div>Designed by Ayush Kumar</div>
@@ -103,19 +88,94 @@
             </div>
         </div>
     </div>
-		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-	
-		<script>
-			$(document).ready(function(){
-			  $('.toast').toast('show');
-			});
-		</script>
-		
+
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
 		<script>
 			var dt = new Date();
-			document.getElementById("datetime").innerHTML=dt.toLocaleTimeString();
+			document.querySelector("#form-button").addEventListener('click', handleForm);
+			function handleForm(event) {
+				event.preventDefault();
+				document.querySelector("#form-button").disabled = true;
+				document.querySelector("#spinr").style.display = "inline-block";
+				let image = document.querySelector("#input_image");
+				if(image.files.length <= 0){
+					document.querySelector("#orig_submit_btn").click();
+					document.querySelector("#form-button").disabled = false;
+					document.querySelector("#spinr").style.display = "none";
+					return;
+				}
+				let name = document.querySelector("#input_name").value;
+				if(name.length == 0){
+					name = "Anonymous";
+				}
+				let formData = new FormData();
+				formData.append('name',name);
+				formData.append('image',image.files[0]);
+				fetch('/predict', {
+					method:'POST',
+					body: formData
+				})
+				.then(response => response.json())
+				.then(response => {
+					if(response.success){
+						document.querySelector("#result-div").innerHTML = `
+							<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center prediction-box" style="min-height: 200px;">
+								<div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
+								<div class="toast-header">
+									<strong class="mr-auto">Prediction &emsp; &emsp; &emsp; &emsp; &emsp;</strong>
+									<small><span id="datetime">${dt.toLocaleTimeString()}</span></small>
+									<button type="button" class="ml-2 mb-1 close toast-close-button" onclick="close_toast()" data-dismiss="toast" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="toast-body">
+									<h6>success: ${response.success}</h6>
+									<h6>method: ${response.method}</h6>
+									<h6>name: ${response.name}</h6>
+									<h6>description: ${response.description}</h6>
+									<h6>covid_percentage: ${response.covid_percentage}</h6>
+									<h6>normal_percentage: ${response.normal_percentage}</h6>
+									<h6>pneumonia_percentage: ${response.pneumonia_percentage}</h6>
+									<h6>prediction: ${response.prediction}</h6>
+									<h6>image_url: ${response.image_url}</h6>
+								</div>
+								</div>
+							</div>
+						`;
+					}
+					else{
+						document.querySelector("#result-div").innerHTML = `
+						<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center prediction-box" style="min-height: 200px;">
+								<div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
+								<div class="toast-header">
+									<strong class="mr-auto">Prediction &emsp; &emsp; &emsp; &emsp; &emsp;</strong>
+									<small><span id="datetime">${dt.toLocaleTimeString()}</span></small>
+									<button type="button" class="ml-2 mb-1 close toast-close-button" onclick="close_toast()" data-dismiss="toast" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="toast-body">
+									<h6>success: ${response.success}</h6>
+									<h6>method: ${response.method}</h6>
+									<h6>description: ${response.description}</h6>
+								</div>
+								</div>
+							</div>
+						`;
+					}
+				})
+				.then(() => {
+					document.querySelector("#form-button").disabled = false;
+					document.querySelector("#spinr").style.display = "none";
+				});
+				
+			}
+			function close_toast(){
+				document.querySelector(".toast").style.display = "none";
+			}
 		</script>
 	</body>
 </html>

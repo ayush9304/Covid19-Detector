@@ -4,10 +4,9 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="SERVING TENSORFLOW 2.0 MODELS VIA DJANGO">
-		<meta name="author" content="AIBharata.com">
+		<meta name="description" content="COVID19 Detection using X-Ray Images API">
+		<meta name="author" content="Ayush Kumar">
 		<title>COVID-19 Detector | CoviScan</title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="{% static 'styles.css' %}">
@@ -66,6 +65,7 @@
                                         <div class="ex2">
                                             <b>{</b><br>
                                             <b>&emsp;"success"&nbsp;&nbsp;:&emsp;</b> boolean<br>
+                                            <b>&emsp;"method"&nbsp;&nbsp;:&emsp;</b> text<br>
                                             <b>&emsp;"description"&nbsp;&nbsp;:&emsp;</b> text<br>
                                             <b>}</b><br>
                                         </div>
@@ -204,11 +204,6 @@
 			$(document).ready(function(){
 			  $('.toast').toast('show');
 			});
-		</script>
-		
-		<script>
-			var dt = new Date();
-			document.getElementById("datetime").innerHTML=dt.toLocaleTimeString();
 		</script>
 	</body>
 </html>

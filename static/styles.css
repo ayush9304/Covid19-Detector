@@ -93,3 +93,13 @@ body{
 .alert{
     margin-bottom: 0;
 }
+
+.spinner-border-sm{
+    margin-bottom: 2px;
+}
+.toast{
+    opacity: 1!important;
+}
+#spinr{
+    display: none;
+}
