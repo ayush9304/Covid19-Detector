@@ -3,6 +3,10 @@ body{
     margin: 0;
 }
 
+.navbar{
+    background-color: #2e3236!important;
+}
+
 .navbar-brand{
     letter-spacing: 3px;
 }
