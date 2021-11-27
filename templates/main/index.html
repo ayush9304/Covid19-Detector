@@ -9,23 +9,26 @@
 		<meta name="author" content="Ayush Kumar">
 		<title>COVID-19 Detector | CoviScan</title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'styles.css' %}">
 	</head>
 	
 	<body>
 		<div>
 			<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-				<a class="navbar-brand" href={% url 'index' %}>CoviScan</a>
+				<a class="navbar-brand" href={% url 'index' %} style="font-weight: 500; font-family: 'Poiret One'; font-size: 1.5rem;">coviscan</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="collapse navbar-collapse" id="navbarNav">
 					<ul class="navbar-nav">
-						<li class="nav-item active">
-							<a class="nav-link" href={% url 'index' %}>Home <span class="sr-only">(current)</span></a>
+						<li class="nav-item">
+							<a class="nav-link active" href={% url 'index' %}>Home <span class="sr-only">(current)</span></a>
 						</li>
-                        <li class="nav-item active">
-							<a class="nav-link" href={% url 'api_docs' %}>API Docs <span class="sr-only">(current)</span></a>
+                        <li class="nav-item">
+							<a class="nav-link" href={% url 'api_docs' %}>API <span class="sr-only">(current)</span></a>
 						</li>
 					</ul>
 				</div>
@@ -57,7 +60,7 @@
 							<div class="form-group text-center">
 								<br>
 								<button type="submit" id="orig_submit_btn" style="display: none;" class="btn btn-primary">Predict</button>
-								<button class="btn btn-rounded btn-info" id="form-button">
+								<button class="btn btn-rounded btn-dark" id="form-button">
 									<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="spinr"></span>
 									Upload and Predict
 								</button>
