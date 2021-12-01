@@ -234,6 +234,7 @@ def ios_api_image(request):
 def api_docs(request):
     return render(request, 'main/api_docs.html')
 
+@csrf_exempt
 def warmup(request):
     return JsonResponse({
         'success': True,
