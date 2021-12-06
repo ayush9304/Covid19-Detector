@@ -7,6 +7,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run django urls test
-      run:
+      run: |
         pip3 install -r requirements.txt
         python3 manage.py test
