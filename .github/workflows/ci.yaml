@@ -1,0 +1,12 @@
+name: Testing
+on: push
+
+jobs:
+  test_urls:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run django urls test
+      run:
+        pip3 install -r requirements.txt
+        python3 manage.py test
