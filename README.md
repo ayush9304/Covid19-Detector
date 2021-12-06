@@ -1,1 +1,1 @@
-# Covid19-Detector
+# Covid19 Detector
