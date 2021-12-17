@@ -42,7 +42,7 @@
 		<div class="container-fluid">
 			<br> <br>
 			<div class="container box">
-				<div class="card border-light" style="border-color: rgba(217,218,219,.5)!important;">
+				<div class="card border" style="border-color: rgba(217,218,219,.5)!important;">
 					<h5 class="card-header bg-light">COVID-19 Detection Using X-Rays</h5>
 					<div class="card-body form-div">
 						<form method="POST" action="{% url 'index_predict' %}" enctype="multipart/form-data">
@@ -73,95 +73,63 @@
 					</div>	
 				</div>	
 			</div>
-			<div id="result-div">
-			</div>
 		</div>
 
 
 		<!-- ################################## -->
 
 
-		<div class="container">
+		<div class="container" id="prediction-display">
 			<div class="container prediction-div">
 				<div class="col-5">
-					<img src="{% static 'xray_sample.jpg' %}" id="x-ray_img" class="rounded-lg mx-auto my-auto d-block ig" alt="X-Ray Image">
+					<img src="{% static 'no_image.png' %}" id="x-ray_img" class="rounded-lg mx-auto my-auto d-block ig" alt="X-Ray Image">
 				</div>
 				<div class="col-7">
 					<div class="row-special">
 						<div class="card card-special">
-							<div class="svg-div">
-								<svg viewBox="0 0 36 36" class="circular-chart orange">
-									<path class="circle-bg"
-									  d="M18 2.0845
-										a 15.9155 15.9155 0 0 1 0 31.831
-										a 15.9155 15.9155 0 0 1 0 -31.831"
-									/>
-									<path class="circle"
-									  stroke-dasharray="30, 100"
-									  d="M18 2.0845
-										a 15.9155 15.9155 0 0 1 0 31.831
-										a 15.9155 15.9155 0 0 1 0 -31.831"
-									/>
-									<text x="18" y="20.55" class="percentage" id="covid_p_h">30%</text>
-								</svg>
-							</div>
+							<div class="svg-div" id="covid-svg-div"></div>
 							<div class="card-body prediction-text">
 								<div>
 									<h5 class="card-title">COVID-19</h5>
-									<p class="card-text">Probability: <span id="covid_p_f">30.0213%</span></p>
+									<p class="card-text">Probability: <span id="covid_p_f"></span></p>
 								</div>
 							</div>
 						</div>
 	
 						<div class="card card-special">
-							<div class="svg-div">
-								<svg viewBox="0 0 36 36" class="circular-chart green">
-									<path class="circle-bg"
-										d="M18 2.0845
-										a 15.9155 15.9155 0 0 1 0 31.831
-										a 15.9155 15.9155 0 0 1 0 -31.831"
-									/>
-									<path class="circle"
-										stroke-dasharray="60, 100"
-										d="M18 2.0845
-										a 15.9155 15.9155 0 0 1 0 31.831
-										a 15.9155 15.9155 0 0 1 0 -31.831"
-									/>
-									<text x="18" y="20.55" class="percentage" id="pneumonia_p_h">60%</text>
-								</svg>
-							</div>
+							<div class="svg-div" id="pneumonia-svg-div"></div>
 							<div class="card-body prediction-text">
 								<div>
 									<h5 class="card-title">Pneumonia</h5>
-									<p class="card-text">Probability: <span id="pneumonia_p_f">59.9961%</span></p>
+									<p class="card-text">Probability: <span id="pneumonia_p_f"></span></p>
 								</div>
 							</div>
 						</div>
 	
 						<div class="card card-special">
-							<div class="svg-div">
-								<svg viewBox="0 0 36 36" class="circular-chart blue">
-									<path class="circle-bg"
-										d="M18 2.0845
-										a 15.9155 15.9155 0 0 1 0 31.831
-										a 15.9155 15.9155 0 0 1 0 -31.831"
-									/>
-									<path class="circle"
-										stroke-dasharray="90, 100"
-										d="M18 2.0845
-										a 15.9155 15.9155 0 0 1 0 31.831
-										a 15.9155 15.9155 0 0 1 0 -31.831"
-									/>
-									<text x="18" y="20.55" class="percentage" id="normal_p_h">90%</text>
-								</svg>
-							</div>
+							<div class="svg-div" id="normal-svg-div"></div>
 							<div class="card-body prediction-text">
 								<div class>
 									<h5 class="card-title">Normal</h5>
-									<p class="card-text">Probability: <span id="normal_p_f">90.0083%</span></p>
+									<p class="card-text">Probability: <span id="normal_p_f"></span></p>
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="container" id="error-display">
+			<div class="container error-div">
+				<div class="oops-img-div col-7" style="margin: auto;">
+					<img src="{% static 'oops.jpg' %}" alt="Oops! something went wrong" class="mx-auto d-block">
+				</div>
+				<div class="col-5">
+					<div class="oops-text-div">
+						<h1 class="oops-text">Oops!</h1>
+						<p class="oops-text" id="error_text">Looks like something went wrong.</p>
 					</div>
 				</div>
 			</div>
@@ -222,51 +190,91 @@
 				})
 				.then(response => response.json())
 				.then(response => {
-					if(response.success){
-						document.querySelector("#result-div").innerHTML = `
-							<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center prediction-box" style="min-height: 200px;">
-								<div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
-								<div class="toast-header">
-									<strong class="mr-auto">Prediction &emsp; &emsp; &emsp; &emsp; &emsp;</strong>
-									<small><span id="datetime">${dt.toLocaleTimeString()}</span></small>
-									<button type="button" class="ml-2 mb-1 close toast-close-button" onclick="close_toast()" data-dismiss="toast" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="toast-body">
-									<h6>success: ${response.success}</h6>
-									<h6>method: ${response.method}</h6>
-									<h6>name: ${response.name}</h6>
-									<h6>description: ${response.description}</h6>
-									<h6>covid_percentage: ${response.covid_percentage}</h6>
-									<h6>normal_percentage: ${response.normal_percentage}</h6>
-									<h6>pneumonia_percentage: ${response.pneumonia_percentage}</h6>
-									<h6>prediction: ${response.prediction}</h6>
-									<h6>image_url: ${response.image_url}</h6>
-								</div>
-								</div>
-							</div>
+
+					if (response.success) {
+						let c_percentage = response.covid_percentage;
+						let n_percentage = response.normal_percentage;
+						let p_percentage = response.pneumonia_percentage;
+						let prediction = response.prediction;
+						let image_url = response.image_url;
+						let name = response.name;
+						let description = response.description;
+						let method = response.method;
+						let success = response.success;
+
+						c_percentage = (parseFloat(c_percentage)*100).toFixed(5);
+						n_percentage = (parseFloat(n_percentage)*100).toFixed(5);
+						p_percentage = (parseFloat(p_percentage)*100).toFixed(5);
+
+						document.querySelector("#covid_p_f").innerText = `${c_percentage}%`;
+						document.querySelector("#normal_p_f").innerText = `${n_percentage}%`;
+						document.querySelector("#pneumonia_p_f").innerText = `${p_percentage}%`;
+						
+						c_percentage_h = Math.round(c_percentage);
+						n_percentage_h = Math.round(n_percentage);
+						p_percentage_h = Math.round(p_percentage);
+
+						document.querySelector("#covid-svg-div").innerHTML = `
+							<svg viewBox="0 0 36 36" class="circular-chart orange">
+								<path class="circle-bg"
+									d="M18 2.0845
+									a 15.9155 15.9155 0 0 1 0 31.831
+									a 15.9155 15.9155 0 0 1 0 -31.831"
+								/>
+								<path class="circle"
+									stroke-dasharray="${c_percentage_h}, 100"
+									d="M18 2.0845
+									a 15.9155 15.9155 0 0 1 0 31.831
+									a 15.9155 15.9155 0 0 1 0 -31.831"
+								/>
+								<text x="18" y="20.55" class="percentage" id="covid_p_h">${c_percentage_h}%</text>
+							</svg>
 						`;
+
+						document.querySelector("#pneumonia-svg-div").innerHTML = `
+							<svg viewBox="0 0 36 36" class="circular-chart green">
+								<path class="circle-bg"
+									d="M18 2.0845
+									a 15.9155 15.9155 0 0 1 0 31.831
+									a 15.9155 15.9155 0 0 1 0 -31.831"
+								/>
+								<path class="circle"
+									stroke-dasharray="${p_percentage_h}, 100"
+									d="M18 2.0845
+									a 15.9155 15.9155 0 0 1 0 31.831
+									a 15.9155 15.9155 0 0 1 0 -31.831"
+								/>
+								<text x="18" y="20.55" class="percentage" id="pneumonia_p_h">${p_percentage_h}%</text>
+							</svg>
+						`;
+
+						document.querySelector("#normal-svg-div").innerHTML = `
+							<svg viewBox="0 0 36 36" class="circular-chart blue">
+								<path class="circle-bg"
+									d="M18 2.0845
+									a 15.9155 15.9155 0 0 1 0 31.831
+									a 15.9155 15.9155 0 0 1 0 -31.831"
+								/>
+								<path class="circle"
+									stroke-dasharray="${n_percentage_h}, 100"
+									d="M18 2.0845
+									a 15.9155 15.9155 0 0 1 0 31.831
+									a 15.9155 15.9155 0 0 1 0 -31.831"
+								/>
+								<text x="18" y="20.55" class="percentage" id="normal_p_h">${n_percentage_h}%</text>
+							</svg>
+						`;
+
+						document.querySelector("#x-ray_img").src = image_url;
+
+						document.querySelector("#error-display").style.display = "none";
+						document.querySelector("#error_text").innerText = "Looks like something went wrong.";
+						document.querySelector("#prediction-display").style.display = "block";
 					}
-					else{
-						document.querySelector("#result-div").innerHTML = `
-						<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center prediction-box" style="min-height: 200px;">
-								<div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
-								<div class="toast-header">
-									<strong class="mr-auto">Prediction &emsp; &emsp; &emsp; &emsp; &emsp;</strong>
-									<small><span id="datetime">${dt.toLocaleTimeString()}</span></small>
-									<button type="button" class="ml-2 mb-1 close toast-close-button" onclick="close_toast()" data-dismiss="toast" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="toast-body">
-									<h6>success: ${response.success}</h6>
-									<h6>method: ${response.method}</h6>
-									<h6>description: ${response.description}</h6>
-								</div>
-								</div>
-							</div>
-						`;
+					else {
+						document.querySelector("#prediction-display").style.display = "none";
+						document.querySelector("#error_text").innerText = response.description;
+						document.querySelector("#error-display").style.display = "block";
 					}
 				})
 				.then(() => {
@@ -274,9 +282,6 @@
 					document.querySelector("#spinr").style.display = "none";
 				});
 				
-			}
-			function close_toast(){
-				document.querySelector(".toast").style.display = "none";
 			}
 		</script>
 	</body>

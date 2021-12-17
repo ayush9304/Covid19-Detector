@@ -146,7 +146,7 @@ body{
 }
 
 .circular-chart.orange .circle {
-    stroke: #ff9f00;
+    stroke: #ff8800;
 }
 
 .circular-chart.green .circle {
@@ -179,7 +179,8 @@ body{
 }
 
 .card-special{
-      flex-direction: row;
+    flex-direction: row;
+    margin-bottom: 12px;
 }
 
 .svg-div{
@@ -216,6 +217,40 @@ form{
     padding-left: 1rem;
 }
 
+#prediction-display{
+    display: none;
+}
+
+.error-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 35px;
+    margin-bottom: 25px;
+    border-width: 1px;
+}
+
+#error-display{
+    display: none;
+}
+
+.error-div img{
+    width: 100%;
+    height: auto;
+}
+.error-div h1{
+    font-size: 3.5rem;
+    color: #eb4651;
+    font-family: 'Barlow', sans-serif;
+    margin-bottom: .8rem;
+}
+.error-div p{
+    color: #554f4f;
+    font-family: 'Barlow', sans-serif;
+    margin-left: .2rem;
+}
+
 @media (max-width: 576px) {
     .prediction-div{
         flex-direction: column;
@@ -223,7 +258,20 @@ form{
         align-items: center;
         padding: 0;
     }
+    .error-div{
+        flex-direction: column;
+        margin-top: 15px;
+        align-items: center;
+        padding: 0;
+    }
     .prediction-div>div{
+        width: 100%;
+        max-width: 90%;
+        margin-top: 35px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .error-div>div{
         width: 100%;
         max-width: 90%;
         margin-top: 35px;
@@ -236,6 +284,9 @@ form{
     }
     .prediction-text{
         margin-top: 10px;
+    }
+    .error-div .oops-text-div{
+        text-align: center;
     }
     .row-special>div{
         margin-top: 5px;
@@ -265,6 +316,15 @@ form{
     form{
         padding-left: 0px!important;
         padding-right: 0px!important;
+    }
+}
+
+@media (max-width: 340px) {
+    .error-div>div{
+        max-width: 99%;
+    }
+    .error-div h1 {
+        font-size: 3rem;
     }
 }
 

@@ -92,7 +92,7 @@ def index_predict(request):
             return JsonResponse({
                 'success': False,
                 'method': request.method,
-                'description': "Image is not a X-ray"
+                'description': "Looks like this is not a X-ray image. Please upload a valid X-ray image."
             })
 
         data = Patient.objects.create(name=name, xray=image)
@@ -136,7 +136,7 @@ def api_image(request):
         if not validate(image):
             return JsonResponse({
                 'success': False,
-                'description': "Image is not a X-ray"
+                'description': "Looks like this is not a X-ray image. Please upload a valid X-ray image."
             })
 
         data = Patient.objects.create(name=name, xray=image)
@@ -213,7 +213,7 @@ def ios_api_image(request):
             #data.delete()
             return JsonResponse({
                 'success': False,
-                'description': "Not an X-Ray image",
+                'description': "Looks like this is not a X-ray image. Please upload a valid X-ray image.",
                 'covid_percentage': 1,
                 'normal_percentage': 1,
                 'pneumonia_percentage': 1,
