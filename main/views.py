@@ -67,9 +67,6 @@ def validate(file, isurl=False) -> bool:
     img = image.img_to_array(img)
     img = np.expand_dims(img, axis=0)/255.0
     prediction = validator.predict(img)[0][0]
-    print("##############################")
-    print(prediction)
-    print("##############################")
     return prediction>=0.5
 
 def classify(file, isurl=False):
