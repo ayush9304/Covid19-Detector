@@ -107,3 +107,236 @@ body{
 #spinr{
     display: none;
 }
+
+
+.flex-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.single-chart {
+    width: 33%;
+    justify-content: space-around ;
+}
+  
+.circular-chart {
+    display: block;
+    margin: 10px auto;
+    max-width: 80%;
+    max-height: 250px;
+}
+
+.circle-bg {
+    fill: none;
+    stroke: #eee;
+    stroke-width: 3.8;
+}
+
+.circle {
+    fill: none;
+    stroke-width: 2.8;
+    stroke-linecap: round;
+    animation: progress 1s ease-out forwards;
+}
+  
+@keyframes progress {
+    0% {
+        stroke-dasharray: 0 100;
+    }
+}
+
+.circular-chart.orange .circle {
+    stroke: #ff8800;
+}
+
+.circular-chart.green .circle {
+    stroke: #3c9ee5;
+}
+
+.circular-chart.blue .circle {
+    stroke: #4CC790;
+}
+
+.percentage {
+    fill: #666;
+    font-family: sans-serif;
+    font-size: 0.5em;
+    text-anchor: middle;
+}
+
+
+.chart-box{
+    display: flex;
+    align-items: center;
+}
+.row-special{
+    margin-left: 0px;
+    margin-right: 0px;
+    justify-content: space-between;
+}
+.ig{
+    max-width: 100%;
+}
+
+.card-special{
+    flex-direction: row;
+    margin-bottom: 12px;
+}
+
+.svg-div{
+    display: flex;
+    align-items: center;
+
+}
+.svg-div > svg{
+    margin: auto;
+    width: 50%;
+    height: 90%;
+}
+
+.prediction-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 35px;
+    margin-bottom: 25px;
+    border-width: 1px;
+}
+
+.prediction-div img{
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.prediction-text{
+    display: flex;
+    align-items: center;
+}
+
+form{
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+
+#prediction-display{
+    display: none;
+}
+
+.error-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 35px;
+    margin-bottom: 25px;
+    border-width: 1px;
+}
+
+#error-display{
+    display: none;
+}
+
+.error-div img{
+    width: 100%;
+    height: auto;
+}
+.error-div h1{
+    font-size: 3.5rem;
+    color: #eb4651;
+    font-family: 'Barlow', sans-serif;
+    margin-bottom: .8rem;
+}
+.error-div p{
+    color: #554f4f;
+    font-family: 'Barlow', sans-serif;
+    margin-left: .2rem;
+}
+
+@media (max-width: 576px) {
+    .prediction-div{
+        flex-direction: column;
+        margin-top: 0px;
+        align-items: center;
+        padding: 0;
+    }
+    .error-div{
+        flex-direction: column;
+        margin-top: 15px;
+        align-items: center;
+        padding: 0;
+    }
+    .prediction-div>div{
+        width: 100%;
+        max-width: 90%;
+        margin-top: 35px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .error-div>div{
+        width: 100%;
+        max-width: 90%;
+        margin-top: 35px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .prediction-div img{
+        width: 100%;
+        height: auto;
+    }
+    .prediction-text{
+        margin-top: 10px;
+    }
+    .error-div .oops-text-div{
+        text-align: center;
+    }
+    .row-special>div{
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 416px) {
+    body>.container-fluid{
+        padding-left: 0px!important;
+        padding-right: 0px!important;
+    }
+    body>.container{
+        padding-left: 0px!important;
+        padding-right: 0px!important;
+    }
+}
+
+@media (max-width: 375px) {
+    .prediction-div>div{
+        max-width: 99%;
+    }
+    body>.container-fluid>div{
+        padding-left: 2px!important;
+        padding-right: 2px!important;
+    }
+    form{
+        padding-left: 0px!important;
+        padding-right: 0px!important;
+    }
+}
+
+@media (max-width: 340px) {
+    .error-div>div{
+        max-width: 99%;
+    }
+    .error-div h1 {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 320px) {
+    .form-div{
+        padding-left: 2px!important;
+        padding-right: 2px!important;
+    }
+    .prediction-text h5{
+        font-size: 1.15rem;
+    }
+    .prediction-text .card-text{
+        font-size: 0.85rem;
+    }
+}
