@@ -9,23 +9,12 @@ from .utils import *
 import tensorflow as tf
 import numpy as np
 from PIL import Image
-# from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from django.core.files.base import ContentFile
 import random
 import string
 import base64
 import os
-# import cv2
-
-# def dice_coef(y_true, y_pred):
-#     y_true_f = keras.flatten(y_true)
-#     y_pred_f = keras.flatten(y_pred)
-#     intersection = keras.sum(y_true_f * y_pred_f)
-#     return (2. * intersection + 1) / (keras.sum(y_true_f) + keras.sum(y_pred_f) + 1)
-
-# def dice_coef_loss(y_true, y_pred):
-#     return -dice_coef(y_true, y_pred)
 
 def get_covid19_classifier():
     # model = load_model(os.path.join(settings.BASE_DIR, 'models/v2/_densenet121.h5'))
@@ -79,31 +68,9 @@ def validate(file, isurl=False) -> bool:
     VALIDATOR.set_tensor(VALIDATOR_I[0]['index'], img)
     VALIDATOR.invoke()
     output = VALIDATOR.get_tensor(VALIDATOR_O[0]['index'])
-    # prediction = validator.predict(img)[0][0]
-    # return output>=0.74
+    del img
     return output[0][0] >= 0.74
 
-# def classify(file, isurl=False):
-#     if not isurl:
-#         img = Image.open(file.file)
-#     else:
-#         img = Image.open(os.path.join(settings.BASE_DIR, 'media/'+file))
-#     img = img.convert('RGB')
-#     img = img.resize((180, 180), Image.NEAREST)
-#     img = image.img_to_array(img)
-#     img = np.expand_dims(img, axis=0)/255.0
-
-#     ############
-#     classifier.summary()
-#     print("MODEL INPUT SHAPE:  ---------------- >  ",classifier.input_shape)
-#     print("IMG SHAPE:  ---------------- >  ",img.shape)
-#     ############
-    
-#     prediction = classifier.predict(img)[0]
-#     covid_p = prediction[0]
-#     normal_p = prediction[1]
-#     pneumonia_p = prediction[2]
-#     return predictions_class[np.argmax(prediction, axis=-1)], covid_p, normal_p, pneumonia_p
 
 def predict(file, isurl=False):
     if not isurl:
@@ -115,7 +82,6 @@ def predict(file, isurl=False):
     x_g = image.img_to_array(img.convert('L'))
     X = x_g.reshape((1, 512, 512, 1))
     X_norm = ((X-127.0)/127.0).astype(np.float32)
-    # segment = segmentor.predict(X_norm)
 
     SEGMENTOR.set_tensor(SEGMENTOR_I[0]['index'], X_norm)
     SEGMENTOR.invoke()
@@ -142,7 +108,6 @@ def predict(file, isurl=False):
 
     X1_norm = e_lung/255.
     X1_norm = np.expand_dims(X1_norm, axis=0)
-    # pred = classifier.predict(X1_norm)
 
     CLASSIFIER.set_tensor(CLASSIFIER_I[0]['index'], X1_norm)
     CLASSIFIER.invoke()
@@ -153,6 +118,17 @@ def predict(file, isurl=False):
     normal_p = pred[1]
     pneumonia_p = pred[2]
 
+    del img
+    del X
+    del X_norm
+    del X1_norm
+    del segment
+    del e_lung
+    del ekernal
+    del dkernal
+    del pmask
+    del fmask
+    del x_g
     return predictions_class[np.argmax(pred, axis=-1)], covid_p, normal_p, pneumonia_p
 
 
