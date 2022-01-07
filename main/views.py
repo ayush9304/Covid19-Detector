@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from .models import Patient
 from django.conf import settings
 
+from .utils import *
 
 import tensorflow as tf
 import numpy as np
@@ -15,7 +16,7 @@ import random
 import string
 import base64
 import os
-import cv2
+# import cv2
 
 def dice_coef(y_true, y_pred):
     y_true_f = keras.flatten(y_true)
@@ -67,7 +68,7 @@ def validate(file, isurl=False) -> bool:
     img = image.img_to_array(img)
     img = np.expand_dims(img, axis=0)/255.0
     prediction = validator.predict(img)[0][0]
-    return prediction>=0.5
+    return prediction>=0.74
 
 def classify(file, isurl=False):
     if not isurl:
@@ -91,24 +92,36 @@ def predict(file, isurl=False):
         img = Image.open(os.path.join(settings.BASE_DIR, 'media/'+file))
     img = img.convert('RGB')
     img = img.resize((512, 512), Image.NEAREST)
-    x = image.img_to_array(img)
-    x_g = cv2.cvtColor(x, cv2.COLOR_RGB2GRAY)
+    # x = image.img_to_array(img)
+    # x_g = cv2.cvtColor(x, cv2.COLOR_RGB2GRAY)
+    x_g = image.img_to_array(img.convert('L'))
     X = x_g.reshape((1, 512, 512, 1))
     X_norm = ((X-127.0)/127.0).astype(np.float32)
     segment = segmentor.predict(X_norm)
     segment = np.squeeze(segment[0])*255
-    ekernal = np.ones([20,20])
+    # ekernal = np.ones([20,20])
+    # dkernal = np.ones([25,25])
+    # pmask = cv2.erode(segment, ekernal)
+    # fmask = cv2.dilate(pmask, dkernal)
+    # segment = fmask
+    ekernal = np.ones([19,19])
     dkernal = np.ones([25,25])
-    pmask = cv2.erode(segment, ekernal)
-    fmask = cv2.dilate(pmask, dkernal)
+    pmask = erode(segment, ekernal)
+    fmask = dilate(pmask, dkernal)
     segment = fmask
 
     e_lung = np.zeros((512,512))
     i=(np.squeeze(X_norm)*127)+127
     e_lung[segment>245] = i[segment>245]
-    e_lung = cv2.cvtColor(e_lung.astype(np.uint8), cv2.COLOR_GRAY2RGB)
+    # e_lung = cv2.cvtColor(e_lung.astype(np.uint8), cv2.COLOR_GRAY2RGB)
+    e_lung = e_lung.astype(np.uint8)
+    e_lung = Image.fromarray(e_lung)
+    e_lung = e_lung.convert('RGB')
+    e_lung = e_lung.resize((224, 224), Image.NEAREST)
+    e_lung = image.img_to_array(e_lung)
 
-    X1_norm = cv2.resize((e_lung/255.), (224,224))
+    # X1_norm = cv2.resize((e_lung/255.), (224,224))
+    X1_norm = e_lung/255.
     X1_norm = np.expand_dims(X1_norm, axis=0)
     pred = classifier.predict(X1_norm)
     pred = np.squeeze(pred)
