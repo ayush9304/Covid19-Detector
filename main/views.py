@@ -33,7 +33,7 @@ def get_covid19_classifier():
     return model
 
 def get_xray_validator():
-	model = load_model(os.path.join(settings.BASE_DIR, 'models/_xray_validator.h5'))
+	model = load_model(os.path.join(settings.BASE_DIR, 'models/v2/_xray_validator_v2.h5'))
 	# model.summary()
 	return model
 
@@ -63,7 +63,7 @@ def validate(file, isurl=False) -> bool:
     else:
         img = Image.open(os.path.join(settings.BASE_DIR, 'media/'+file))
     img = img.convert('RGB')
-    img = img.resize((150, 150), Image.NEAREST)
+    img = img.resize((160, 160), Image.NEAREST)
     img = image.img_to_array(img)
     img = np.expand_dims(img, axis=0)/255.0
     prediction = validator.predict(img)[0][0]
