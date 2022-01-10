@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from .models import Patient
+from django.http import JsonResponse, HttpResponseRedirect
+from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse
+from .models import *
 from django.conf import settings
 
 from .utils import *
@@ -156,7 +158,10 @@ def index_predict(request):
                 'description': "Looks like this is not a X-ray image. Please upload a valid X-ray image."
             })
 
-        data = Patient.objects.create(name=name, xray=image)
+        if request.user.is_authenticated:
+            data = Scan.objects.create(user=request.user, name=name, xray=image)
+        else:
+            data = Scan.objects.create(name=name, xray=image)
 
         prediction, covid_percentage, normal_percentage, pneumonia_percentage = predict(image)
         data.prediction = prediction
@@ -200,7 +205,10 @@ def api_image(request):
                 'description': "Looks like this is not a X-ray image. Please upload a valid X-ray image."
             })
 
-        data = Patient.objects.create(name=name, xray=image)
+        if request.user.is_authenticated:
+            data = Scan.objects.create(user=request.user, name=name, xray=image)
+        else:
+            data = Scan.objects.create(name=name, xray=image)
 
         prediction, covid_percentage, normal_percentage, pneumonia_percentage = predict(image)
         data.prediction = prediction
@@ -246,8 +254,8 @@ def ios_api_image(request):
         filename = ''.join(random.choices(string.ascii_letters + string.digits, k=16)) + ".jpg"
         imgdata = ContentFile(base64.b64decode(imgstr))
         
-        data = Patient.objects.create()
-        data.xray.save(filename, imgdata, save=True)  # xray is Patient model's ImageField
+        data = Scan.objects.create()
+        data.xray.save(filename, imgdata, save=True)  # xray is Scan model's ImageField
 
         img_url = str(data.xray)
         
@@ -302,3 +310,91 @@ def warmup(request):
         'method': request.method,
         'description': "Warming up"
     })
+
+def register_fn(request):
+    if request.method == "POST":
+        fname = request.POST['firstname']
+        lname = request.POST['lastname']
+        username = request.POST["username"]
+        email = request.POST["email"]
+
+        # Ensuring password matches confirmation
+        password = request.POST["password"]
+        confirmation = request.POST["confirmation"]
+        if password != confirmation:
+            return render(request, "main/register.html", {
+                "message": "Passwords must match."
+            })
+
+        # Attempt to create new user
+        try:
+            user = User.objects.create_user(username, email, password)
+            user.first_name = fname
+            user.last_name = lname
+            user.save()
+        except:
+            return render(request, "main/register.html", {
+                "message": "Username already taken."
+            })
+        login(request, user)
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(request, "main/register.html")
+
+def login_fn(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+            
+        else:
+            return render(request, "main/login.html", {
+                "message": "Invalid username and/or password.",
+                "username": username,
+                "rerun": True
+            })
+    else:
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            return render(request, "main/login.html", {
+                "rerun": False
+            })
+
+def logout_fn(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
+
+def scans(request):
+    if request.user.is_authenticated:
+        results = Scan.objects.filter(user=request.user).order_by('-scan_date')
+        return render(request, "main/scans.html", {
+            "scans": results
+        })
+    return HttpResponseRedirect(reverse("login"))
+
+@csrf_exempt
+def delete_scan(request, scan_id):
+    if request.user.is_authenticated:
+        if request.method == "DELETE":
+            scan = Scan.objects.get(id=scan_id)
+            if scan.user == request.user:
+                scan.delete()
+                return JsonResponse({
+                    'success': True,
+                    'description': "Scan deleted"
+                })
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'description': "Scan not found"
+                })
+        else:
+            return JsonResponse({
+                'success': False,
+                'description': "Request method must be DELETE"
+            })
+    return HttpResponseRedirect(reverse("login"))

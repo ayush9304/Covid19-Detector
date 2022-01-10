@@ -9,6 +9,11 @@ body{
 
 .navbar-brand{
     letter-spacing: 3px;
+    margin-bottom: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-right: 2rem;
+    margin-top: -3px;
 }
 
 .navbar-collapse{
@@ -339,4 +344,13 @@ form{
     .prediction-text .card-text{
         font-size: 0.85rem;
     }
+}
+
+.dropdown-item.active, .dropdown-item:active{
+    background-color: #2e3236;
+    color: #fff;
+}
+
+.hidden-td{
+    padding: 0px!important;
 }
