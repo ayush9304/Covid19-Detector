@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from .models import *
 from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 
 from .utils import *
 
@@ -170,6 +171,11 @@ def index_predict(request):
         data.pneumonia_percentage = pneumonia_percentage
         data.save()
 
+        if "127.0.0.1" in get_current_site(request).domain:
+            uri = "http://127.0.0.1:8000/media/"
+        else:
+            uri = "https://covid19-detection-api.herokuapp.com/media/"
+
         return JsonResponse({
             'success': True,
             'method': request.method,
@@ -179,7 +185,7 @@ def index_predict(request):
             'normal_percentage': float(data.normal_percentage),
             'pneumonia_percentage': float(data.pneumonia_percentage),
             'prediction': data.prediction,
-            'image_url': "https://covid19-detection-api.herokuapp.com/media/" + str(data.xray)
+            'image_url': uri + str(data.xray)
         })
     else:
         return JsonResponse({
