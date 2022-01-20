@@ -329,6 +329,7 @@ def register_fn(request):
         confirmation = request.POST["confirmation"]
         if password != confirmation:
             return render(request, "main/register.html", {
+                "success": False,
                 "message": "Passwords must match."
             })
 
@@ -340,10 +341,11 @@ def register_fn(request):
             user.save()
         except:
             return render(request, "main/register.html", {
+                "success": False,
                 "message": "Username already taken."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("index"), status=200)
     else:
         return render(request, "main/register.html")
 
