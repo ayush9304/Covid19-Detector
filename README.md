@@ -1,4 +1,6 @@
 
+CoviScan
+
 <img src="static/full_brand_logo.png" alt="coviscan" border="0">
 
 Coviscan is an automated imaging tool which process chest x-ray images and predicts whether the person has Covid-19 disease or Pneumonia or Normal.
