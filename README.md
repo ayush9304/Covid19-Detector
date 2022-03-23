@@ -4,7 +4,32 @@ Coviscan is an automated imaging tool which process chest x-ray images and predi
 
 It uses deep learning algorithm Convolution Neural Networks (CNNs) also known as ConvNets to process and extract features from X-Ray images. The whole pipeline involves several steps like preprocessing, semantic segmentation, classification etc.
 
-## How to use
+# Datasets
+
+- [https://www.kaggle.com/nikhilpandey360/chest-xray-masks-and-labels](https://www.kaggle.com/nikhilpandey360/chest-xray-masks-and-labels)
+- [https://www.kaggle.com/tawsifurrahman/covid19-radiography-database](https://www.kaggle.com/tawsifurrahman/covid19-radiography-database)
+- [https://www.kaggle.com/paultimothymooney/chest-xray-pneumonia](https://www.kaggle.com/paultimothymooney/chest-xray-pneumonia)
+- [https://github.com/agchung/Figure1-COVID-chestxray-dataset](https://github.com/agchung/Figure1-COVID-chestxray-dataset)
+- [https://github.com/ieee8023/covid-chestxray-dataset](https://github.com/ieee8023/covid-chestxray-dataset)
+
+# Working
+
+![image](https://user-images.githubusercontent.com/56977388/159712093-758e4dde-982f-4a56-b23f-f835572ecd75.png)
+
+  ### Preprocessing
+  Preprocessing includes resizing, converting to grayscale, normalization of xray image etc.
+  
+  ### Validation
+  An xray validator (classifier) checks whether the image is an xray image or not.
+  
+  ### Lungs Segmentation
+  Using **U-Net** architecture model, we segments out the lungs from the xray image. We used dice coefficient as loss function.
+  This model was able to achieve a dice score of **0.9621** in training data and **0.9611** on test data. The model was trained for 46 epochs.
+  
+  ### Covid/Pneumonia/Normal Classification
+  A CNN model predicts whether the patients have Covid or Pneumonia or Normal. We tested on three different CNN architectures (i.e., MobileNetV2, EfficientNetB2, DenseNet121) for this task. The **DenseNet121** gave the best result with the accuracy of **95.67%**. The accuracy of MobileNetV2 & EfficientNetB2 models was 92.64% and 86.37% respectively.
+
+# How to use
 
 - **Install Python**
   - Download and install python 3.9 from [python.org](https://www.python.org)
@@ -12,7 +37,7 @@ It uses deep learning algorithm Convolution Neural Networks (CNNs) also known as
 
 - **Get the code**
   ```
-  git clone https://github.com/ayush9304/covid19-detector-api
+  git clone https://github.com/ayush9304/Covid19-Detector
   ```
  
 - **Install Python dependencies**
