@@ -24,10 +24,10 @@ It uses deep learning algorithm Convolution Neural Networks (CNNs) also known as
   
   ### Lungs Segmentation
   Using **U-Net** architecture model, we segments out the lungs from the xray image. We used dice coefficient as loss function.
-  This model was able to achieve a dice score of **0.9621** in training data and **0.9611** on test data. The model was trained for 46 epochs.
+  This model was able to achieve a dice score of <code>**0.9621**</code> in training data and <code>**0.9611**</code> on test data. The model was trained for 46 epochs.
   
   ### Covid/Pneumonia/Normal Classification
-  A CNN model predicts whether the patients have Covid or Pneumonia or Normal. We tested on three different CNN architectures (i.e., MobileNetV2, EfficientNetB2, DenseNet121) for this task. The **DenseNet121** gave the best result with the accuracy of **95.67%**. The accuracy of MobileNetV2 & EfficientNetB2 models was 92.64% and 86.37% respectively.
+  A CNN model predicts whether the patients have Covid or Pneumonia or Normal. We tested on three different CNN architectures (i.e., MobileNetV2, EfficientNetB2, DenseNet121) for this task. The **DenseNet121** gave the best result with the accuracy of <code>**95.67%**</code>. The accuracy of MobileNetV2 & EfficientNetB2 models was <code>92.64%</code> and <code>86.37%</code> respectively.
 
 # How to use
 
